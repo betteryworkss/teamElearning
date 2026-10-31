@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>이러닝 환경 분석 활동</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#fff;--fg:#111;--mute:#6e6e6e;--line:#e6e6e6;--soft:#f6f6f4;--hl:#e4ff5c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+header{max-width:960px;margin:0 auto;padding:28px 28px 0}
+.stepper{display:flex;gap:6px}
+.stepper span{flex:1;font-size:12px;color:#b0b0b0;border-top:3px solid var(--line);padding-top:10px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stepper span.done{border-color:var(--fg);color:var(--mute)}.stepper span.on{border-color:var(--fg);color:var(--fg);font-weight:700}
+main{max-width:960px;margin:0 auto;padding:64px 28px 96px}
+.no{font-size:14px;color:var(--mute);margin:0 0 10px;font-weight:500}
+h1{font-weight:700;font-size:clamp(34px,6vw,60px);line-height:1.15;letter-spacing:-.05em;margin:0 0 28px}
+.greet{font-size:clamp(20px,3vw,28px);font-weight:300;letter-spacing:-.04em;line-height:1.5;margin:0 0 12px}
+.lead{color:var(--mute);margin:0 0 48px;font-size:16px}
+.fld{margin-top:40px}.fld label{display:block;font-size:14px;color:var(--mute);margin-bottom:8px;font-weight:500}
+.fld input{width:100%;background:var(--soft);border:1px solid transparent;border-radius:10px;color:var(--fg);font:400 18px 'Noto Sans KR',sans-serif;padding:16px 18px;outline:none}
+.fld input:focus{border-color:var(--fg);background:#fff}
+.note{font-size:13px;color:var(--mute);margin:10px 0 0}
+.pick{font-size:15px;font-weight:500;margin:44px 0 14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;color:var(--fg);font:inherit;text-align:left;padding:24px 22px;cursor:pointer;min-height:160px;display:flex;flex-direction:column;justify-content:space-between;transition:.18s}
+.card:hover{background:var(--fg);color:#fff;border-color:var(--fg);transform:translateY(-3px)}
+.card small{font-size:12px;color:var(--mute)}.card:hover small,.card:hover span{color:#bbb}
+.card b{font-size:21px;font-weight:700;letter-spacing:-.04em;display:block;margin-bottom:2px}.card span{font-size:13px;color:var(--mute)}
+.item{border-top:1px solid var(--line);padding:40px 0}
+.item h2{font-size:24px;font-weight:700;letter-spacing:-.04em;margin:0 0 4px}.item .d{color:var(--mute);margin:0 0 14px;font-size:15px}
+.hint{font-size:14px;background:var(--soft);border-radius:8px;padding:10px 14px;margin:0 0 18px;color:#444}.hint:before{content:"💡 "}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.cols{grid-template-columns:1fr}}
+.cols label,.q p{display:block;font-size:13px;font-weight:700;margin:0 0 8px}
+.cols .imp label span{background:var(--hl);padding:1px 6px;border-radius:4px}
+textarea{width:100%;min-height:130px;background:#fff;border:1px solid var(--line);border-radius:10px;color:var(--fg);padding:14px 16px;font:400 15px/1.7 'Noto Sans KR',sans-serif;outline:none;resize:vertical}
+textarea:focus{border-color:var(--fg)}
+.reveal{opacity:0;max-height:0;overflow:hidden;transform:translateY(14px);transition:opacity .9s,transform .9s}
+.reveal.on{opacity:1;max-height:3000px;transform:none;background:var(--soft);border-radius:18px;padding:36px 30px;margin-top:8px}
+.reveal h2{font-size:26px;font-weight:700;letter-spacing:-.04em;margin:0 0 24px}.q{margin-bottom:22px}.q p{font-size:16px;font-weight:500;margin-bottom:10px}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:56px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:0 30px;height:54px;border-radius:999px;border:1px solid var(--fg);background:var(--fg);color:#fff;font:500 16px 'Noto Sans KR',sans-serif;cursor:pointer;text-decoration:none;transition:.15s}
+.btn:hover{opacity:.85}.btn.ghost{background:#fff;color:var(--fg);border-color:var(--line)}.btn:disabled{background:#eee;color:#aaa;border-color:#eee;cursor:not-allowed}
+.sumbox{border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:12px}
+.sumbox h3{margin:0 0 12px;font-size:18px;font-weight:700;letter-spacing:-.03em}
+.row{display:grid;grid-template-columns:84px 1fr;gap:12px;font-size:15px;margin-top:8px;white-space:pre-wrap}
+.row b{font-size:12px;color:var(--mute);font-weight:500;padding-top:4px}
+.imp{background:var(--hl);border-radius:8px;padding:12px 16px;font-weight:700}.row.i b{padding-top:12px;color:var(--fg)}
+.keys{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 48px}
+@media(max-width:640px){.keys{grid-template-columns:1fr}}
+.keys div{padding:22px 24px;background:var(--hl);border-radius:14px}
+.keys small{font-size:12px;font-weight:700;color:#4a5200}.keys p{margin:6px 0 0;font-size:18px;font-weight:700;letter-spacing:-.03em;white-space:pre-wrap}
+h2.t{font-weight:700;font-size:22px;letter-spacing:-.04em;margin:48px 0 16px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:18px;align-items:flex-start;padding:26px 0;border-top:1px solid var(--line)}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.steps li:before{content:counter(s);flex:0 0 34px;height:34px;border-radius:50%;background:var(--fg);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.steps .tx{flex:1;font-size:17px;padding-top:3px}.steps .tx small{display:block;color:var(--mute);font-size:14px;margin-top:2px}
+.steps .btn{height:42px;padding:0 20px;font-size:14px;margin-top:12px}
+.steps a.l{color:var(--fg)}
+.pbox{display:none;margin-top:14px;background:var(--soft);border-radius:12px;padding:18px 20px}.pbox.on{display:block}
+.pbox pre{max-height:380px;overflow:auto;margin:0 0 14px;white-space:pre-wrap;word-break:break-word;font:400 14px/1.7 'Noto Sans KR',sans-serif}
+.cp{font-size:13px;height:36px;padding:0 16px}
+
+:root{--hl:#fff0e5;--acc:#f25c05}
+.stepper span.done,.stepper span.on{border-color:var(--acc)}
+.chip{font-size:12px;color:var(--mute);margin-top:10px;min-height:18px}
+.btn{background:var(--acc);border-color:var(--acc)}.btn.ghost,.btn.line{background:#fff;color:var(--fg);border-color:var(--line)}.btn:disabled{background:#eee;border-color:#eee;color:#aaa}
+.card:hover{background:var(--acc);border-color:var(--acc)}.card.sel{border:2px solid var(--acc)}
+.keys small,.row.i b{color:var(--acc)}.keys div{background:var(--hl)}
+.imp{border-left:4px solid var(--acc)}.steps li:before{background:var(--acc)}
+.cols{grid-template-columns:1fr 1fr;gap:16px}.cols .ic:nth-child(3){grid-column:1/-1}textarea[data-f=cur],textarea[data-f=imp]{min-height:150px}textarea[data-f=fn]{min-height:90px}textarea{overflow:hidden}.cols label span{background:var(--hl);padding:1px 6px;border-radius:4px}
+@media(max-width:820px){.cols{grid-template-columns:1fr}}
+.ent{border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:13px;font-weight:700}
+.sh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.btn.sm{height:34px;padding:0 16px;font-size:13px;flex:none}
+.sep{border:0;border-top:1px dashed var(--line);margin:14px 0}.sep:last-child{display:none}
+.zones{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:700px){.zones{grid-template-columns:1fr}}
+.zone{border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px}.zone h3{margin:0;font-size:20px}
+.cm{display:none}.cm.on{display:block}.cm textarea{min-height:90px}.ca{display:flex;gap:8px;margin-top:8px}
+.post{background:var(--soft);border-radius:10px;padding:12px 14px;font-size:14px;white-space:pre-wrap;word-break:break-word;margin-bottom:8px}
+.post small{display:flex;justify-content:space-between;color:var(--mute);margin-bottom:4px;font-weight:700}.post small a{cursor:pointer;font-weight:400}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.7);overflow:auto;padding:24px;z-index:9;text-align:center}.ov div{background:#fff;border-radius:14px;padding:16px;max-width:900px;margin:0 auto}.ov img{max-width:100%}
+</style></head><body>
+<header><div class="stepper" id="tabs"></div><div class="chip" id="chip"></div></header>
+<main id="app"></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+// 예시 프롬프트 내용은 여기에 추가하세요
+const PROMPT_EXAMPLE=`# 이러닝 재설계를 위한 프로토타입 제작 프롬프트
+
+## 1. 역할 및 목적
+
+너는 교육공학 및 교수설계 전문가이자 UX/UI 디자이너, 프론트엔드 개발자야.
+
+나는 기존 이러닝 환경을 학습과학 이론에 근거하여 분석하고, 학습 경험을 개선한 웹 프로토타입을 제작하려고 해.
+
+이번 재설계의 목적은 단순히 기존 홈페이지의 디자인을 변경하는 것이 아니라, 학습 환경의 문제점을 진단하고 이를 개선할 수 있는 구체적인 학습 활동과 기능을 설계하는 거야.
+
+다음 원칙에 따라 작업할 것.
+
+- 기존 이러닝 환경의 문제점을 분석한 결과를 바탕으로 재설계를 진행할 것.
+- 이론의 핵심 개념을 실제 학습 환경의 설계 원리로 적용할 것.
+- 개선 방향과 구현할 기능 사이의 논리적 연결을 유지할 것.
+- 학습자가 실제로 사용할 수 있는 직관적인 인터페이스를 설계할 것.
+
+## 2. 설계 근거
+
+다음은 기존 이러닝 환경을 분석한 결과야.
+
+### 2-1. 네 가지 관점 분석
+
+**① 학습자 중심**
+
+- 현재 상태: [학습자 중심 관점에서 발견한 기존 환경의 특징 및 문제점]
+- 개선 방향: [학습자의 선행지식, 흥미, 수준, 요구 등을 고려하여 개선할 방향]
+- 구현할 기능 및 요소: [개선 방향을 실현하기 위해 필요한 기능, 콘텐츠, 학습 활동 또는 화면 구성]
+
+**② 지식 중심**
+
+- 현재 상태: [지식 중심 관점에서 발견한 기존 환경의 특징 및 문제점]
+- 개선 방향: [핵심 개념의 이해, 개념 간 관계 파악, 지식의 적용 등을 지원하기 위한 개선 방향]
+- 구현할 기능 및 요소: [개선 방향을 실현하기 위해 필요한 기능, 콘텐츠, 학습 활동 또는 화면 구성]
+
+**③ 평가 중심**
+
+- 현재 상태: [평가 중심 관점에서 발견한 기존 환경의 특징 및 문제점]
+- 개선 방향: [학습 과정 점검, 피드백, 자기 평가 및 학습 개선을 지원하기 위한 개선 방향]
+- 구현할 기능 및 요소: [개선 방향을 실현하기 위해 필요한 기능, 콘텐츠, 학습 활동 또는 화면 구성]
+
+**④ 공동체 중심**
+
+- 현재 상태: [공동체 중심 관점에서 발견한 기존 환경의 특징 및 문제점]
+- 개선 방향: [학습자 간 지식 공유, 상호작용, 협력 및 공동체 형성을 지원하기 위한 개선 방향]
+- 구현할 기능 및 요소: [개선 방향을 실현하기 위해 필요한 기능, 콘텐츠, 학습 활동 또는 화면 구성]
+
+### 2-2. 상호작용 분석
+
+**① 학습자-학습자 상호작용**
+
+- 현재 상태: [학습자 간 토론, 협업, 피어리뷰 등 상호작용의 특징 및 문제점]
+- 개선 방향: [학습자 간 상호작용을 개선하기 위한 방향]
+- 구현할 기능 및 요소: [토론, 공동 과제, 동료 피드백 등 관련 기능]
+
+**② 학습자-교수자 상호작용**
+
+- 현재 상태: [질의응답, 교수자 피드백, 학습 지원 등의 특징 및 문제점]
+- 개선 방향: [학습자와 교수자 간 상호작용을 개선하기 위한 방향]
+- 구현할 기능 및 요소: [질문 게시판, 피드백 제공, 학습 지원 등 관련 기능]
+
+**③ 학습자-콘텐츠 상호작용**
+
+- 현재 상태: [학습자가 콘텐츠를 이용하는 방식과 능동적인 학습 참여의 특징 및 문제점]
+- 개선 방향: [학습자의 탐색, 적용, 문제 해결 등 능동적인 학습을 지원하기 위한 방향]
+- 구현할 기능 및 요소: [퀴즈, 문제 해결 활동, 시뮬레이션, 콘텐츠 조작 등 관련 기능]
+
+**④ 교수자-교수자 상호작용**
+
+- 현재 상태: [교수자, 조교 및 운영진 간 협력과 정보 공유에 관해 확인한 사항]
+- 개선 방향: [교수자 및 운영진 간 협력과 일관된 학습 지원을 개선하기 위한 방향]
+- 구현할 기능 및 요소: [역할별 관리 기능, 정보 공유 구조 등 관련 요소]
+
+**⑤ 교수자-콘텐츠 상호작용**
+
+- 현재 상태: [교수자의 콘텐츠 설계, 선정, 수정 및 관리에 관해 확인한 사항]
+- 개선 방향: [학습자의 요구와 학습 결과를 반영하여 콘텐츠를 개선하기 위한 방향]
+- 구현할 기능 및 요소: [콘텐츠 수정 및 보완, 자료 관리 등 관련 요소]
+
+**⑥ 콘텐츠-콘텐츠 상호작용**
+
+- 현재 상태: [차시, 학습 자료 및 콘텐츠 간 연계성과 일관성에 관한 특징 및 문제점]
+- 개선 방향: [학습 자료 간 연결과 학습 내용의 연속성을 개선하기 위한 방향]
+- 구현할 기능 및 요소: [관련 자료 연결, 학습 순서 구성, 콘텐츠 간 연계 표시 등 관련 요소]
+
+위 분석 결과를 프로토타입의 설계 근거로 활용할 것.
+
+단, 모든 항목에 새로운 기능을 추가할 필요는 없음. 개선이 필요한 항목을 선별하고, 제시된 개선 방향을 실현하는 데 필요한 기능과 요소를 중심으로 구현할 것.
+
+## 3. 구현 요구사항
+
+앞서 제시한 분석 결과를 바탕으로 이러닝 환경의 웹 프로토타입을 제작할 것.
+
+### 3-1. 설계 원칙
+
+- 학습과학 이론의 핵심 개념을 실제 화면과 학습 활동에 반영할 것.
+- 각 기능이 어떤 문제를 해결하고 어떤 학습 경험을 지원하는지 고려할 것.
+- 기존 환경의 문제점과 개선 방향을 연결하여 기능을 설계할 것.
+- 기능의 수를 늘리는 것보다 교육적 목적에 적합한 기능을 구현하는 데 집중할 것.
+- 학습자의 학습 흐름과 사용성을 고려하여 화면을 구성할 것.
+
+### 3-2. 기능 구현
+
+- 위에서 제시한 '구현할 기능 및 요소'를 우선적으로 반영할 것.
+- 학습자가 직접 조작하고 결과를 확인할 수 있는 기능을 구현할 것.
+- 입력, 제출, 수정, 이동 등 주요 상호작용이 실제로 작동하도록 할 것.
+- 기능의 목적과 사용 방법을 학습자가 쉽게 이해할 수 있도록 구성할 것.
+- 학습 활동에 필요한 콘텐츠와 예시 데이터를 적절히 제공할 것.
+
+### 3-3. 디자인
+
+- 직관적이고 일관된 인터페이스를 구성할 것.
+- 학습 콘텐츠와 학습 활동을 명확하게 구분할 것.
+- 학습자의 현재 위치와 진행 상황을 쉽게 파악할 수 있도록 할 것.
+- 불필요한 메뉴와 장식은 최소화할 것.
+- 데스크톱과 모바일 환경에서 사용할 수 있도록 반응형으로 구성할 것.
+
+## 4. 기술 및 구현 조건
+
+- html 파일로 다운받아 실행할 수 있게 구현할 것.
+- 별도의 서버나 데이터베이스 없이 실행할 수 있는 구조를 우선할 것.
+- 학습자가 입력한 내용은 현재 실행 중인 화면에 반영되도록 할 것.
+- 게시물, 댓글, 답변 등은 프로토타입 안에서 확인하고 수정할 수 있도록 할 것.
+- 실제 서비스와 연결되지 않은 기능은 연결된 것처럼 표현하지 말 것.
+
+## 5. 설계 의도 보존 및 추가 기능 제안
+
+내가 제시한 분석 결과, 개선 방향 및 구현할 기능을 우선적으로 반영할 것.
+
+내가 제시하지 않은 기능을 임의로 추가하기보다는, 제안된 기능만으로 설계 목적을 달성할 수 있는지 먼저 검토할 것.
+
+추가 기능이 필요하다고 판단되면 다음 사항을 설명한 후 제안할 것.
+
+1. 추가 기능이 필요한 이유
+2. 해결하고자 하는 문제
+3. 기대되는 학습 경험의 변화
+4. 기존 설계 방향과의 관련성
+
+설계 의도를 변경하거나 새로운 학습 활동을 추가해야 하는 경우에는 그 이유를 명시할 것.
+
+## 6. 결과물 및 제약 조건
+
+최종 결과물은 교육적 설계 의도를 확인할 수 있는 작동 가능한 웹 프로토타입임.
+
+다음 조건을 준수할 것.
+
+- 주요 버튼과 메뉴가 실제로 작동하도록 구현할 것.
+- 단순히 디자인만 보여주는 화면이 아니라 학습자가 직접 활동할 수 있는 환경을 제작할 것.
+- 프로토타입의 목적과 관계없는 로그인, 결제, 실제 서버 연동 등의 기능은 구현하지 말 것.
+- 시연을 위해 사용하는 가상의 강좌, 게시물, 학습자 데이터는 실제 데이터와 구분할 것.
+- 구현하지 못한 기능이나 기술적 한계가 있다면 명시할 것.
+- 제시된 교육적 목적과 구현 결과 사이의 일관성을 유지할 것.
+
+위의 설계 근거와 요구사항을 바탕으로 웹 프로토타입을 제작할 것.
+
+프로토타입 구현 후에는 다음 사항을 간단히 정리할 것.
+
+1. 구현한 주요 기능
+2. 각 기능이 반영한 개선 방향
+3. 구현 과정에서 추가하거나 변경한 사항
+4. 아직 구현하지 못한 기능과 한계`;
+const DRIVE="https://drive.google.com/drive/folders/1jLKQJHTEBR5Mhn8-1XuLcDsDEROLKYJn?usp=share_link";
+const TITLES=["활동 선택","네 가지 관점 분석","상호작용 분석","활동 정리","학습환경 재설계","활동 발표"];
+const ENVS=[["K-MOOC 환경","대규모 공개 온라인 강좌"],["게임 환경","게임 기반 학습"],["AI 환경","AI 튜터·생성형 AI 학습"],["XR 환경","확장현실(XR) 몰입형 학습"]];
+const P=[["learner","학습자 중심","학습자의 배경지식·흥미·수준을 고려하는가?","학습자가 스스로 목표를 세우고 선택할 수 있나요? 수준별 지원이나 개별 피드백이 있나요?"],
+["knowledge","지식 중심","핵심 개념과 깊이 있는 이해를 돕는가?","학습 내용이 구조화되어 있나요? 개념 이해와 적용을 돕는 활동이 있나요?"],
+["assess","평가 중심","학습 과정을 점검하고 피드백을 주는가?","형성평가나 즉각적 피드백이 있나요? 학습자가 자신의 성장을 확인할 수 있나요?"],
+["community","공동체 중심","함께 배우는 문화와 소속감이 있는가?","토론·협업·질문 공간이 있나요? 서로 배우는 분위기가 만들어지나요?"]];
+const I=[["l_l","학습자 ↔ 학습자","동료 간 토론, 협업, 피어 리뷰","함께 공부할 수 있는 장치(토론방, 팀 과제 등)가 있나요?"],["l_t","학습자 ↔ 교수자","질의응답, 피드백, 상담","질문하면 얼마나 빨리, 어떻게 답을 받나요?"],["l_c","학습자 ↔ 콘텐츠","영상, 자료, 퀴즈, 시뮬레이션 활용","학습자가 콘텐츠와 얼마나 능동적으로 상호작용하나요?"],
+["t_t","교수자 ↔ 교수자","운영진·조교 간 협력과 정보 공유","운영진이 서로 협력하고 있음을 느낄 수 있나요?"],["t_c","교수자 ↔ 콘텐츠","콘텐츠 제작·수정·운영 방식","교수자가 학습자 수준이나 반응에 따라 설명이나 자료를 수정·보완하나요?"],["c_c","콘텐츠 ↔ 콘텐츠","콘텐츠 간 연계, 추천, 일관성","차시·자료 간 내용이 자연스럽게 이어지나요?"]];
+let S={team:"",env:""},D={items:new Map()},page=0,db=null,uid=null,tk=null,unsub=[],pend={},timers={},dbIds=new Set(),FB=[],lastSig="",chk=null;
+try{S.team=localStorage.getItem("elteam")||""}catch(e){}
+const $=s=>document.querySelector(s),app=$("#app");
+const esc=t=>String(t||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hs=s=>{let h=5381;for(const c of s)h=(h*33^c.codePointAt(0))>>>0;return h.toString(36)};
+const tkey=n=>"t"+hs(n.trim().toLowerCase())+hs([...n.trim().toLowerCase()].reverse().join(""));
+const gv=id=>D.items.get(id)||{};
+const entries=(k,s)=>{const a=[...D.items].filter(([i,v])=>v.kind===k&&v.sec===s).map(([id,v])=>({id,...v})).sort((x,y)=>(x.ord-y.ord)||(x.id<y.id?-1:1));return a.length?a:[{id:s+"-0",kind:k,sec:s,ord:0,cur:"",imp:"",fn:""}]};
+const filled=(k,s)=>entries(k,s).some(e=>[e.cur,e.imp,e.fn].every(v=>(v||"").trim()));
+const qd=id=>(gv(id).text||"").trim();
+const SUPABASE_URL="https://YOUR-PROJECT.supabase.co",SUPABASE_KEY="YOUR-ANON-KEY";
+let ch=[];
+function joinTeam(name){name=name.trim();S.team=name;try{localStorage.setItem("elteam",name)}catch(e){}
+const k=tkey(name);if(k===tk)return;tk=k;ch.forEach(c=>db&&db.removeChannel(c));ch=[];D.items=new Map();dbIds=new Set();S.env="";if(!db)return;
+const t=k,ov=m=>{for(const p of Object.values(pend)){const it=m.get(p.id)||{...p.base,cur:"",imp:"",fn:"",text:""};it[p.f]=p.v;m.set(p.id,it)}};
+db.from("teams").select("env").eq("id",t).maybeSingle().then(r=>{if(t!==tk)return;S.env=r.data&&r.data.env||"";onData()});
+db.from("items").select("*").eq("team",t).then(r=>{if(t!==tk||!r.data)return;const m=new Map();dbIds=new Set();r.data.forEach(x=>{m.set(x.id,x);dbIds.add(x.id)});ov(m);D.items=m;onData()});
+ch.push(db.channel("it"+t).on("postgres_changes",{event:"*",schema:"public",table:"items"},p=>{const x=p.new&&p.new.id?p.new:p.old;if(!x||x.team!==t||t!==tk)return;
+if(p.eventType==="DELETE"){D.items.delete(x.id);dbIds.delete(x.id)}else{D.items.set(x.id,x);dbIds.add(x.id);ov(D.items)}onData()}).subscribe());
+ch.push(db.channel("tm"+t).on("postgres_changes",{event:"*",schema:"public",table:"teams"},p=>{const x=p.new;if(x&&x.id===t){S.env=x.env||"";onData()}}).subscribe())}
+function put(id,f,v,base){const cur={...base,cur:"",imp:"",fn:"",text:"",...gv(id),[f]:v};D.items.set(id,cur);if(!db||!tk)return;const key=id+"|"+f,t=tk;
+pend[key]={id,f,v,base};clearTimeout(timers[key]);timers[key]=setTimeout(async()=>{delete pend[key];if(t!==tk)return;
+const row={...base,cur:"",imp:"",fn:"",text:"",...gv(id),[f]:v,team:t,id},up=()=>db.from("items").update({[f]:v}).eq("team",t).eq("id",id);
+try{if(dbIds.has(id))await up();else{dbIds.add(id);const r=await db.from("items").insert(row);if(r.error&&r.error.code==="23505")await up()}}catch(e){}},500)}
+function create(id,data){D.items.set(id,data);if(db&&tk){dbIds.add(id);db.from("items").insert({...data,team:tk,id}).then(()=>{})}}
+function addEntry(k,s){if(![...D.items].some(([i,v])=>v.kind===k&&v.sec===s))create(s+"-0",{kind:k,sec:s,ord:0,cur:"",imp:"",fn:""});
+create(s+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),{kind:k,sec:s,ord:Date.now(),cur:"",imp:"",fn:""});onData()}
+function delEntry(id){D.items.delete(id);dbIds.delete(id);Object.keys(pend).forEach(k=>{if(pend[k].id===id)delete pend[k]});if(db&&tk)db.from("items").delete().eq("team",tk).eq("id",id).then(()=>{});onData()}
+function setEnv(v){S.env=v;if(db&&tk)db.from("teams").upsert({id:tk,name:S.team,env:v}).then(()=>{})}
+function onData(){if(page===0)paintCards();else if(page===1||page===2)soft();else if(page===3)render()}
+function paintCards(){document.querySelectorAll(".card").forEach(c=>c.classList.toggle("sel",c.dataset.e===S.env))}
+function sig(){const L=page===1?P:I,k=page===1?"p":"i";return L.map(x=>entries(k,x[0]).map(e=>e.id).join(",")).join("|")}
+function soft(){if(sig()!==lastSig){const a=document.activeElement,i=a&&a.dataset&&a.dataset.id?{id:a.dataset.id,f:a.dataset.f,s:a.selectionStart}:null,y=scrollY;render();scrollTo(0,y);
+if(i){const t=document.querySelector(`textarea[data-id="${i.id}"][data-f="${i.f}"]`);if(t){t.focus();try{t.setSelectionRange(i.s,i.s)}catch(e){}}}}
+else document.querySelectorAll("textarea[data-id]").forEach(t=>{if(t===document.activeElement)return;const v=gv(t.dataset.id)[t.dataset.f]||"";if(t.value!==v){t.value=v;grow(t)}});chk&&chk()}
+function tabs(){$("#tabs").innerHTML=TITLES.map((t,i)=>`<span class="${i===page?"on":i<page?"done":""}">${i+1}. ${t}</span>`).join("");
+$("#chip").textContent=S.team&&db?`팀 ‘${S.team}’ · 팀원과 실시간으로 함께 편집돼요`:""}
+function go(n){page=n;render();scrollTo(0,0)}
+function nav(last){return `<div class="nav"><button class="btn ghost" id="pv">← 이전 페이지</button>${last?"":`<button class="btn" id="nx">다음 페이지 →</button>`}</div>`}
+function head(){return `<p class="no">STEP ${page+1}</p><h1>${TITLES[page]}</h1>`}
+function ent(e,n,k,s){const ta=(f,l,ph)=>`<div class="ic"><label>${l}</label><textarea data-id="${e.id}" data-f="${f}" data-kind="${k}" data-sec="${s}" data-ord="${e.ord}" placeholder="${ph}">${esc(e[f])}</textarea></div>`;
+return `<div class="ent"><div class="eh"><span>항목 ${n+1}</span><button class="btn line sm" data-del="${e.id}">삭제</button></div><div class="cols">${ta("cur","현재 상태","관찰한 사실을 구체적으로 적어보세요")}${ta("imp","<span>개선 방향</span>","개선할 방향성을 구체적으로 적어보세요")}${ta("fn","구현할 기능 및 요소","개선을 위해 구현할 기능이나 요소를 적어보세요")}</div></div>`}
+function sect(L,k){return L.map(x=>`<section class="item"><div class="sh"><div><h2>${x[1]}</h2><p class="d">${x[2]}</p><p class="hint">${x[3]}</p></div><button class="btn sm" data-add="${k}|${x[0]}">+ 추가</button></div>${entries(k,x[0]).map((e,n)=>ent(e,n,k,x[0])).join("")}</section>`).join("")}
+function qBlock(qs,ids){return `<div class="reveal" id="rv"><h2>분석 결과를 정리해볼까요?</h2>${qs.map((q,i)=>`<div class="q"><p>${ids[i][1]}. ${q}</p><textarea data-id="${ids[i][0]}" data-f="text" data-kind="q" placeholder="위에서 작성한 내용을 근거로 답해보세요">${esc(gv(ids[i][0]).text)}</textarea></div>`).join("")}</div>`}
+function ana(L,k,greet,lead,qs,ids){app.innerHTML=`${head()}<p class="greet">${greet}</p><p class="lead">${lead}</p>${sect(L,k)}${qBlock(qs,ids)}${nav()}`;lastSig=sig();
+chk=()=>{const f=L.every(x=>filled(k,x[0]));$("#rv").classList.toggle("on",f);$("#nx").disabled=!(f&&qd(ids[0][0])&&qd(ids[1][0]))};chk()}
+function summ(L,k){return L.map(x=>{const es=entries(k,x[0]).filter(e=>e.cur||e.imp||e.fn);return `<div class="sumbox"><h3>${x[1]}</h3>${es.map(e=>`<div class="row"><b>현재 상태</b><div>${esc(e.cur)}</div></div><div class="row i"><b>개선 방향</b><div class="imp">${esc(e.imp)}</div></div><div class="row"><b>기능·요소</b><div>${esc(e.fn)}</div></div><hr class="sep">`).join("")}</div>`}).join("")}
+const QK=[["q1","가장 잘 구현된 관점"],["q2","보완할 관점"],["q3","가장 잘 활용된 상호작용"],["q4","강화할 상호작용"]];
+async function makeImg(){const W=1200,M=60,F='"Noto Sans KR","Apple SD Gothic Neo",sans-serif';try{await document.fonts.load('700 20px "Noto Sans KR"');await document.fonts.load('400 20px "Noto Sans KR"')}catch(e){}
+const cv=document.createElement("canvas"),x=cv.getContext("2d");x.font=`400 17px ${F}`;
+const wrap=(t,w,font)=>{x.font=font;const o=[];for(const p of String(t||"-").split("\n")){let l="";for(const c of p){if(x.measureText(l+c).width>w&&l){o.push(l);l=c}else l+=c}o.push(l)}return o};
+const run=d=>{let y=M;const T=(t,sz,wt,col)=>{const f=`${wt} ${sz}px ${F}`;for(const l of wrap(t,W-2*M,f)){y+=sz*1.6;if(d){x.font=f;x.fillStyle=col;x.fillText(l,M,y-sz*.35)}}};
+const B=(lab,t,hl)=>{T(lab,14,700,hl?"#f25c05":"#6e6e6e");const ls=wrap(t,W-2*M-(hl?44:0),`400 17px ${F}`),h=ls.length*28+20;if(hl){if(d){x.fillStyle="#fff0e5";x.fillRect(M,y+4,W-2*M,h);x.fillStyle="#f25c05";x.fillRect(M,y+4,6,h)}y+=14}
+for(const l of ls){y+=28;if(d){x.font=`${hl?700:400} 17px ${F}`;x.fillStyle="#111";x.fillText(l,M+(hl?24:0),y-6)}}y+=hl?16:6};
+T("활동 정리",44,700,"#111");T(`${S.team} · ${S.env}`,20,400,"#6e6e6e");y+=16;QK.forEach(q=>{B(q[1],gv(q[0]).text,1);y+=6});
+[["네 가지 관점",P,"p"],["6가지 상호작용",I,"i"]].forEach(g=>{y+=24;T(g[0],30,700,"#111");g[1].forEach(s=>{y+=10;T(s[1],22,700,"#111");entries(g[2],s[0]).filter(e=>e.cur||e.imp||e.fn).forEach(e=>{B("현재 상태",e.cur);B("개선 방향",e.imp,1);B("구현할 기능 및 요소",e.fn);y+=12})})});return y+M};
+cv.width=W;cv.height=run(false);x.fillStyle="#fff";x.fillRect(0,0,W,cv.height);run(true);return new Promise(r=>cv.toBlob(r,"image/png"))}
+async function dlImg(btn){btn.disabled=true;const b=await makeImg(),u=URL.createObjectURL(b);
+if(!/iPad|iPhone/.test(navigator.userAgent)){const a=document.createElement("a");a.href=u;a.download="activity-summary.png";document.body.appendChild(a);a.click();a.remove();btn.disabled=false;return}
+const o=document.createElement("div");o.className="ov";o.innerHTML=`<div><img src="${u}" alt="활동 정리"><p>이미지를 길게 눌러서 저장하세요.</p><button class="btn">닫기</button></div>`;o.querySelector("button").onclick=()=>o.remove();document.body.appendChild(o);btn.disabled=false}
+function copyText(t,btn){const done=()=>{btn.textContent="복사됨 ✓";setTimeout(()=>btn.textContent="프롬프트 복사하기",1600)};
+const fb=()=>{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy");done()}catch(e){}a.remove()};
+try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+const grow=t=>{t.style.height="auto";t.style.height=(t.scrollHeight+2)+"px"};const ZN=["E-learning","AI","Game","Metaverse"];
+function paintPosts(){ZN.forEach((z,i)=>{const el=$("#po"+i);if(!el)return;const ps=FB.filter(p=>p.zone===z).sort((a,b)=>a.ord-b.ord);
+el.innerHTML=ps.length?ps.map(p=>`<div class="post"><small><span>${esc(p.team)}</span>${(!db||(p.author&&p.author===uid))?`<a data-fd="${p.id}">삭제</a>`:""}</small>${esc(p.text)}</div>`).join(""):`<p class="note">아직 의견이 없어요.</p>`})}
+function render(){tabs();
+if(page===0){app.innerHTML=`${head()}<p class="greet">안녕하세요! 활동을 시작해볼까요?</p>
+<div class="fld"><label for="tm">팀 이름</label><input id="tm" autocomplete="off" placeholder="예: 1팀" value="${esc(S.team)}"><p class="note">같은 팀 이름을 입력하면 팀원과 한 화면을 함께 편집할 수 있어요.</p></div>
+<p class="pick">우리 팀에서 분석해볼 이러닝 환경을 선택해주세요.</p>
+<div class="cards">${ENVS.map((e,i)=>`<button class="card" data-e="${e[0]}"><small>0${i+1}</small><div><b>${e[0]}</b><span>${e[1]}</span></div></button>`).join("")}</div>`;
+const tm=$("#tm");tm.oninput=e=>{S.team=e.target.value};tm.onchange=e=>{if(e.target.value.trim()){joinTeam(e.target.value);tabs()}};paintCards();
+document.querySelectorAll(".card").forEach(c=>c.onclick=()=>{if(!tm.value.trim()){tm.focus();tm.placeholder="팀 이름을 먼저 입력해주세요";return}joinTeam(tm.value);setEnv(c.dataset.e);go(1)})}
+else if(page===1)ana(P,"p",`‘${esc(S.env)}’을 선택하셨네요!`,"우리가 선택한 환경을 네 가지 관점으로 분석해보고, 문제를 진단해보세요.",["현재 강좌에서 가장 잘 구현되고 있는 관점은 무엇인가요?","보완할 수 있는 관점은 무엇인가요?"],[["q1",1],["q2",2]]);
+else if(page===2)ana(I,"i","잘하고 있어요!","이번에는 우리가 선택한 환경을 6가지 상호작용 유형으로 분석해보고, 개선 방향을 제안해보세요.",["현재 강좌에서 가장 잘 활용되고 있는 상호작용은 무엇인가요?","어떤 상호작용을 강화하면 학습 경험이 개선될까요?"],[["q3",3],["q4",4]]);
+else if(page===3){app.innerHTML=`${head()}<p class="greet">훌륭해요!</p><p class="lead">선택한 학습 환경의 문제를 발견하고, 개선 방향성을 잘 찾았어요!<br>우리가 정리한 내용을 한눈에 확인해볼까요?<br><b style="color:var(--fg)">${esc(S.team)} · ${esc(S.env)}</b></p>
+<button class="btn" id="dl" style="margin-bottom:32px">이미지 다운로드 ↓</button>
+<div class="keys">${QK.map(q=>`<div><small>${q[1]}</small><p>${esc(gv(q[0]).text)}</p></div>`).join("")}</div>
+<h2 class="t">네 가지 관점</h2>${summ(P,"p")}<h2 class="t">6가지 상호작용</h2>${summ(I,"i")}${nav()}`;$("#dl").onclick=e=>dlImg(e.target)}
+else if(page===4){app.innerHTML=`${head()}<p class="greet">우리가 제안한 재설계 방안을 중심으로<br>실제 학습 환경을 직접 개선해볼까요?</p><p class="lead">Claude.AI를 활용한 학습환경 재설계 프로토타입 만들기</p>
+<ol class="steps">
+<li><div class="tx">클로드에 접속합니다.<small>다른 AI도 가능해요!</small></div></li>
+<li><div class="tx">프롬프트를 입력합니다.<small>활동 정리 페이지에서 다운로드 받은 활동지와 기존 학습환경의 캡처 이미지를 함께 첨부해보세요.</small><div><button class="btn" id="pb">프롬프트 예시</button></div><div class="pbox" id="pbox"><pre>${esc(PROMPT_EXAMPLE)}</pre><button class="btn cp" id="cp">프롬프트 복사하기</button></div></div></li>
+<li><div class="tx">홈페이지를 함께 보며 팀원 간 수정사항을 정리합니다.<small>프롬프트를 수정해서 프로토타입을 완성해보세요!</small></div></li>
+<li><div class="tx">html 파일로 다운받습니다.</div></li>
+<li><div class="tx">구글 드라이브에 업로드합니다.<div><a class="btn" href="${DRIVE}" target="_blank" rel="noopener noreferrer">바로가기 ↗</a></div></div></li></ol>${nav()}`;
+$("#pb").onclick=()=>$("#pbox").classList.toggle("on");$("#cp").onclick=e=>copyText(PROMPT_EXAMPLE,e.target)}
+else{app.innerHTML=`${head()}<p class="greet">우리가 재설계한 결과물을 다른 팀에게 소개해볼까요?</p><p class="lead">다른 팀의 소개를 들으며 피드백을 남겨보세요.</p>
+<div class="zones">${ZN.map((z,i)=>`<section class="zone"><div class="sh"><h3>${z}</h3><button class="btn sm" data-cm="${i}">+ 추가</button></div><div class="cm" id="cm${i}"><textarea id="ct${i}" placeholder="이 팀의 결과물에 대한 의견을 남겨주세요"></textarea><div class="ca"><button class="btn sm" data-pub="${i}">게시</button><button class="btn line sm" data-cx="${i}">취소</button></div></div><div id="po${i}"></div></section>`).join("")}</div>${nav(1)}`;paintPosts()}
+document.querySelectorAll("textarea").forEach(grow);if(page<5)document.querySelector("#pv")&&($("#pv").onclick=()=>go(page-1));if(page>0&&page<5&&$("#nx"))$("#nx").onclick=()=>go(page+1);if(page===5)$("#pv").onclick=()=>go(4)}
+app.addEventListener("input",e=>{const t=e.target;if(t.tagName==="TEXTAREA"&&t.dataset.id){put(t.dataset.id,t.dataset.f,t.value,{kind:t.dataset.kind,sec:t.dataset.sec,ord:+t.dataset.ord||0});chk&&chk()}if(t.tagName==="TEXTAREA")grow(t)});
+app.addEventListener("click",e=>{const b=e.target.closest("[data-add],[data-del],[data-cm],[data-cx],[data-pub],[data-fd]");if(!b)return;const d=b.dataset;
+if(d.add){const[k,s]=d.add.split("|");addEntry(k,s)}else if(d.del)delEntry(d.del);
+else if(d.cm!==undefined)$("#cm"+d.cm).classList.toggle("on");else if(d.cx!==undefined)$("#cm"+d.cx).classList.remove("on");
+else if(d.pub!==undefined){const t=$("#ct"+d.pub),v=t.value.trim();if(!v)return;const p={zone:ZN[d.pub],text:v,team:S.team||"익명",ord:Date.now(),author:uid||""};
+if(db)db.from("feedback").insert(p).select().single().then(r=>{if(r.data&&!FB.some(x=>x.id===r.data.id)){FB.push(r.data);paintPosts()}});else{FB.push({id:"l"+p.ord,...p});paintPosts()}t.value="";$("#cm"+d.pub).classList.remove("on")}
+else if(d.fd){if(db)db.from("feedback").delete().eq("id",d.fd).then(()=>{FB=FB.filter(p=>p.id!==d.fd);paintPosts()});else{FB=FB.filter(p=>p.id!==d.fd);paintPosts()}}});
+render();
+try{uid=localStorage.getItem("elclient");if(!uid){uid="c"+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem("elclient",uid)}}catch(e){uid=uid||"c"+Math.random().toString(36).slice(2)}
+(()=>{try{if(SUPABASE_URL.includes("YOUR-")||!window.supabase)return;db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+db.from("feedback").select("*").then(r=>{if(r.data){FB=r.data;if(page===5)paintPosts()}});
+db.channel("fb").on("postgres_changes",{event:"*",schema:"public",table:"feedback"},p=>{if(p.eventType==="DELETE")FB=FB.filter(x=>x.id!==p.old.id);else if(!FB.some(x=>x.id===p.new.id))FB.push(p.new);if(page===5)paintPosts()}).subscribe();
+if(S.team.trim()){tk=null;joinTeam(S.team)}tabs()}catch(e){}})();
+</script></body></html>
