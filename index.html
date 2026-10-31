@@ -270,7 +270,7 @@ const gv=id=>D.items.get(id)||{};
 const entries=(k,s)=>{const a=[...D.items].filter(([i,v])=>v.kind===k&&v.sec===s).map(([id,v])=>({id,...v})).sort((x,y)=>(x.ord-y.ord)||(x.id<y.id?-1:1));return a.length?a:[{id:s+"-0",kind:k,sec:s,ord:0,cur:"",imp:"",fn:""}]};
 const filled=(k,s)=>entries(k,s).some(e=>[e.cur,e.imp,e.fn].every(v=>(v||"").trim()));
 const qd=id=>(gv(id).text||"").trim();
-const SUPABASE_URL="https://YOUR-PROJECT.supabase.co",SUPABASE_KEY="YOUR-ANON-KEY";
+const SUPABASE_URL="https://ruejknkltgdjcikccpkg.supabase.co",SUPABASE_KEY="sb_publishable_uVQRGP-tmY6CqqQkwrXHhA_gup81Lah";
 let ch=[];
 function joinTeam(name){name=name.trim();S.team=name;try{localStorage.setItem("elteam",name)}catch(e){}
 const k=tkey(name);if(k===tk)return;tk=k;ch.forEach(c=>db&&db.removeChannel(c));ch=[];D.items=new Map();dbIds=new Set();S.env="";if(!db)return;
@@ -323,7 +323,7 @@ const o=document.createElement("div");o.className="ov";o.innerHTML=`<div><img sr
 function copyText(t,btn){const done=()=>{btn.textContent="복사됨 ✓";setTimeout(()=>btn.textContent="프롬프트 복사하기",1600)};
 const fb=()=>{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy");done()}catch(e){}a.remove()};
 try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
-const grow=t=>{t.style.height="auto";t.style.height=(t.scrollHeight+2)+"px"};const ZN=["E-learning","AI","Game","Metaverse"];
+const grow=t=>{t.style.height="auto";t.style.height=(t.scrollHeight+2)+"px"};const ZN=["E-learning","AI","Game","XR"];
 function paintPosts(){ZN.forEach((z,i)=>{const el=$("#po"+i);if(!el)return;const ps=FB.filter(p=>p.zone===z).sort((a,b)=>a.ord-b.ord);
 el.innerHTML=ps.length?ps.map(p=>`<div class="post"><small><span>${esc(p.team)}</span>${(!db||(p.author&&p.author===uid))?`<a data-fd="${p.id}">삭제</a>`:""}</small>${esc(p.text)}</div>`).join(""):`<p class="note">아직 의견이 없어요.</p>`})}
 function render(){tabs();
