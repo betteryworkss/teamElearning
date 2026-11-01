@@ -83,7 +83,7 @@ h2.t{font-weight:700;font-size:22px;letter-spacing:-.04em;margin:48px 0 16px}
 .cm{display:none}.cm.on{display:block}.cm textarea{min-height:90px}.ca{display:flex;gap:8px;margin-top:8px}
 .post{background:var(--soft);border-radius:10px;padding:12px 14px;font-size:14px;white-space:pre-wrap;word-break:break-word;margin-bottom:8px}
 .post small{display:flex;justify-content:space-between;color:var(--mute);margin-bottom:4px;font-weight:700}.post small a{cursor:pointer;font-weight:400}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.7);overflow:auto;padding:24px;z-index:9;text-align:center}.ov div{background:#fff;border-radius:14px;padding:16px;max-width:900px;margin:0 auto}.ov img{max-width:100%}
+.ov{position:fixed.zones{display:none};inset:0;background:rgba(0,0,0,.7);overflow:auto;padding:24px;z-index:9;text-align:center}.ov div{background:#fff;border-radius:14px;padding:16px;max-width:900px;margin:0 auto}.ov img{max-width:100%}
 </style></head><body>
 <header><div class="stepper" id="tabs"></div><div class="chip" id="chip"></div></header>
 <main id="app"></main>
@@ -347,7 +347,7 @@ else if(page===4){app.innerHTML=`${head()}<p class="greet">우리가 제안한 �
 <li><div class="tx">html 파일로 다운받습니다.</div></li>
 <li><div class="tx">구글 드라이브에 업로드합니다.<div><a class="btn" href="${DRIVE}" target="_blank" rel="noopener noreferrer">바로가기 ↗</a></div></div></li></ol>${nav()}`;
 $("#pb").onclick=()=>$("#pbox").classList.toggle("on");$("#cp").onclick=e=>copyText(PROMPT_EXAMPLE,e.target)}
-else{app.innerHTML=`${head()}<p class="greet">우리가 재설계한 결과물을 다른 팀에게 소개해볼까요?</p><p class="lead">다른 팀의 소개를 들으며 피드백을 남겨보세요.</p>
+else{app.innerHTML=`${head()}<p class="greet">우리가 재설계한 결과물을 다른 팀에게 소개해볼까요?</p><p class="lead">다른 팀의 소개를 들으며 피드백을 남겨보세요.</p><div style="margin:8px 0 40px"><a class="btn" href="https://docs.google.com/document/d/1OP0ODOq1fpPtYS1EPlXs3hh0lPdPebMZwy6pApZem58/edit?usp=sharing" target="_blank" rel="noopener noreferrer">동료 피드백 주기 ↗</a></div>
 <div class="zones">${ZN.map((z,i)=>`<section class="zone"><div class="sh"><h3>${z}</h3><button class="btn sm" data-cm="${i}">+ 추가</button></div><div class="cm" id="cm${i}"><textarea id="ct${i}" placeholder="이 팀의 결과물에 대한 의견을 남겨주세요"></textarea><div class="ca"><button class="btn sm" data-pub="${i}">게시</button><button class="btn line sm" data-cx="${i}">취소</button></div></div><div id="po${i}"></div></section>`).join("")}</div>${nav(1)}`;paintPosts()}
 document.querySelectorAll("textarea").forEach(grow);if(page<5)document.querySelector("#pv")&&($("#pv").onclick=()=>go(page-1));if(page>0&&page<5&&$("#nx"))$("#nx").onclick=()=>go(page+1);if(page===5)$("#pv").onclick=()=>go(4)}
 app.addEventListener("input",e=>{const t=e.target;if(t.tagName==="TEXTAREA"&&t.dataset.id){put(t.dataset.id,t.dataset.f,t.value,{kind:t.dataset.kind,sec:t.dataset.sec,ord:+t.dataset.ord||0});chk&&chk()}if(t.tagName==="TEXTAREA")grow(t)});
