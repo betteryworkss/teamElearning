@@ -271,19 +271,19 @@ const entries=(k,s)=>{const a=[...D.items].filter(([i,v])=>v.kind===k&&v.sec===s
 const filled=(k,s)=>entries(k,s).some(e=>[e.cur,e.imp,e.fn].every(v=>(v||"").trim()));
 const qd=id=>(gv(id).text||"").trim();
 const SUPABASE_URL="https://ruejknkltgdjcikccpkg.supabase.co",SUPABASE_KEY="sb_publishable_uVQRGP-tmY6CqqQkwrXHhA_gup81Lah";
-let ch=[];
+let ch=[],rt="",serr="";
 function joinTeam(name){name=name.trim();S.team=name;try{localStorage.setItem("elteam",name)}catch(e){}
-const k=tkey(name);if(k===tk)return;tk=k;ch.forEach(c=>db&&db.removeChannel(c));ch=[];D.items=new Map();dbIds=new Set();S.env="";if(!db)return;
+const k=tkey(name);if(k===tk)return;tk=k;ch.forEach(c=>db&&db.removeChannel(c));ch=[];rt="";serr="";D.items=new Map();dbIds=new Set();S.env="";if(!db)return;
 const t=k,ov=m=>{for(const p of Object.values(pend)){const it=m.get(p.id)||{...p.base,cur:"",imp:"",fn:"",text:""};it[p.f]=p.v;m.set(p.id,it)}};
 db.from("teams").select("env").eq("id",t).maybeSingle().then(r=>{if(t!==tk)return;S.env=r.data&&r.data.env||"";onData()});
-db.from("items").select("*").eq("team",t).then(r=>{if(t!==tk||!r.data)return;const m=new Map();dbIds=new Set();r.data.forEach(x=>{m.set(x.id,x);dbIds.add(x.id)});ov(m);D.items=m;onData()});
+db.from("items").select("*").eq("team",t).then(r=>{if(r.error){serr=r.error.message;tabs()}if(t!==tk||!r.data)return;const m=new Map();dbIds=new Set();r.data.forEach(x=>{m.set(x.id,x);dbIds.add(x.id)});ov(m);D.items=m;onData()});
 ch.push(db.channel("it"+t).on("postgres_changes",{event:"*",schema:"public",table:"items"},p=>{const x=p.new&&p.new.id?p.new:p.old;if(!x||x.team!==t||t!==tk)return;
-if(p.eventType==="DELETE"){D.items.delete(x.id);dbIds.delete(x.id)}else{D.items.set(x.id,x);dbIds.add(x.id);ov(D.items)}onData()}).subscribe());
+if(p.eventType==="DELETE"){D.items.delete(x.id);dbIds.delete(x.id)}else{D.items.set(x.id,x);dbIds.add(x.id);ov(D.items)}onData()}).subscribe(st=>{rt=st;tabs()}));
 ch.push(db.channel("tm"+t).on("postgres_changes",{event:"*",schema:"public",table:"teams"},p=>{const x=p.new;if(x&&x.id===t){S.env=x.env||"";onData()}}).subscribe())}
 function put(id,f,v,base){const cur={...base,cur:"",imp:"",fn:"",text:"",...gv(id),[f]:v};D.items.set(id,cur);if(!db||!tk)return;const key=id+"|"+f,t=tk;
 pend[key]={id,f,v,base};clearTimeout(timers[key]);timers[key]=setTimeout(async()=>{delete pend[key];if(t!==tk)return;
 const row={...base,cur:"",imp:"",fn:"",text:"",...gv(id),[f]:v,team:t,id},up=()=>db.from("items").update({[f]:v}).eq("team",t).eq("id",id);
-try{if(dbIds.has(id))await up();else{dbIds.add(id);const r=await db.from("items").insert(row);if(r.error&&r.error.code==="23505")await up()}}catch(e){}},500)}
+try{let r;if(dbIds.has(id))r=await up();else{dbIds.add(id);r=await db.from("items").insert(row);if(r.error&&r.error.code==="23505")r=await up()}if(r&&r.error){serr=r.error.message;tabs()}else if(serr){serr="";tabs()}}catch(e){serr=String(e);tabs()}},500)}
 function create(id,data){D.items.set(id,data);if(db&&tk){dbIds.add(id);db.from("items").insert({...data,team:tk,id}).then(()=>{})}}
 function addEntry(k,s){if(![...D.items].some(([i,v])=>v.kind===k&&v.sec===s))create(s+"-0",{kind:k,sec:s,ord:0,cur:"",imp:"",fn:""});
 create(s+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),{kind:k,sec:s,ord:Date.now(),cur:"",imp:"",fn:""});onData()}
@@ -296,7 +296,7 @@ function soft(){if(sig()!==lastSig){const a=document.activeElement,i=a&&a.datase
 if(i){const t=document.querySelector(`textarea[data-id="${i.id}"][data-f="${i.f}"]`);if(t){t.focus();try{t.setSelectionRange(i.s,i.s)}catch(e){}}}}
 else document.querySelectorAll("textarea[data-id]").forEach(t=>{if(t===document.activeElement)return;const v=gv(t.dataset.id)[t.dataset.f]||"";if(t.value!==v){t.value=v;grow(t)}});chk&&chk()}
 function tabs(){$("#tabs").innerHTML=TITLES.map((t,i)=>`<span class="${i===page?"on":i<page?"done":""}">${i+1}. ${t}</span>`).join("");
-$("#chip").textContent=S.team&&db?`팀 ‘${S.team}’ · 팀원과 실시간으로 함께 편집돼요`:""}
+$("#chip").textContent=!S.team?"":!db?"Supabase에 연결되지 않았어요 · 이 화면에서만 저장돼요":serr?`저장 오류: ${serr}`:rt==="SUBSCRIBED"?`팀 ‘${S.team}’ · 실시간 연결됨 ✓`:rt?`팀 ‘${S.team}’ · 실시간 연결 안 됨 (${rt})`:`팀 ‘${S.team}’ · 연결 중…`}
 function go(n){page=n;render();scrollTo(0,0)}
 function nav(last){return `<div class="nav"><button class="btn ghost" id="pv">← 이전 페이지</button>${last?"":`<button class="btn" id="nx">다음 페이지 →</button>`}</div>`}
 function head(){return `<p class="no">STEP ${page+1}</p><h1>${TITLES[page]}</h1>`}
@@ -354,8 +354,9 @@ app.addEventListener("input",e=>{const t=e.target;if(t.tagName==="TEXTAREA"&&t.d
 app.addEventListener("click",e=>{const b=e.target.closest("[data-add],[data-del],[data-cm],[data-cx],[data-pub],[data-fd]");if(!b)return;const d=b.dataset;
 if(d.add){const[k,s]=d.add.split("|");addEntry(k,s)}else if(d.del)delEntry(d.del);
 else if(d.cm!==undefined)$("#cm"+d.cm).classList.toggle("on");else if(d.cx!==undefined)$("#cm"+d.cx).classList.remove("on");
-else if(d.pub!==undefined){const t=$("#ct"+d.pub),v=t.value.trim();if(!v)return;const p={zone:ZN[d.pub],text:v,team:S.team||"익명",ord:Date.now(),author:uid||""};
-if(db)db.from("feedback").insert(p).select().single().then(r=>{if(r.data&&!FB.some(x=>x.id===r.data.id)){FB.push(r.data);paintPosts()}});else{FB.push({id:"l"+p.ord,...p});paintPosts()}t.value="";$("#cm"+d.pub).classList.remove("on")}
+else if(d.pub!==undefined){const t=$("#ct"+d.pub),v=t.value.trim();if(!v)return;const p={zone:ZN[d.pub],text:v,team:S.team||"익명",ord:Date.now(),author:uid||""},done=()=>{t.value="";$("#cm"+d.pub).classList.remove("on")};
+if(db)db.from("feedback").insert(p).select().single().then(r=>{if(r.error){alert("의견 게시 실패: "+r.error.message+(r.error.code?" ("+r.error.code+")":""));return}if(r.data&&!FB.some(x=>x.id===r.data.id)){FB.push(r.data);paintPosts()}done()},e=>alert("의견 게시 실패: "+e));
+else{FB.push({id:"l"+p.ord,...p});paintPosts();done()}}
 else if(d.fd){if(db)db.from("feedback").delete().eq("id",d.fd).then(()=>{FB=FB.filter(p=>p.id!==d.fd);paintPosts()});else{FB=FB.filter(p=>p.id!==d.fd);paintPosts()}}});
 render();
 try{uid=localStorage.getItem("elclient");if(!uid){uid="c"+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem("elclient",uid)}}catch(e){uid=uid||"c"+Math.random().toString(36).slice(2)}
